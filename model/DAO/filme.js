@@ -19,6 +19,12 @@
  * Instalação do Prisma
  * npm install prisma --save                -> Realiza a conexão com o BD
  * npm install @prisma/client --save        -> Permite executar scripts SQL no BD
+ * npx prisma init                          -> Inicializar o prisma no projeto (.env,prisma,etc)
+ * npx prisma migrate dev                   -> Permite sincronizar o Prisma com o BD, Modelar o BD
+ *                                              Conforme as configurações do ORM.
+ *                                                 Cuidado: Esse comando faz um reset no BD
+ * npx prisma migrate reset                 -> Realiza o reset o database
+ * npx prisma generate                      -> Realiza apenas o sincronismo com o BD
  * 
  *  $queryRawUnsafe()     -> Permite executar apenas scripts SQL que retornam
  *      dados do BD (SELECT), permite também executar um script SQL através
@@ -39,7 +45,7 @@
  */
 
 // Import da biblioteca do PrismaClient
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('../../generated/prisma')
 
 // Cria um objeto do PrismaClient para manipular os scripts SQL
 const prisma = new PrismaClient()
@@ -49,7 +55,7 @@ const getSelectAllFilms = async function () {
     
     try {
         // Script SQL 
-        let sql = `select * from tbl_filme order by id desc`
+        let sql = `select * from tbl_filmes order by id desc`
 
         // Executa no BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
