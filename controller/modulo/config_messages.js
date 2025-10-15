@@ -30,11 +30,13 @@ const ERROR_CONTENT_TYPE = {status:false, status_code:415, message: 'Não foi po
 /************************************** MENSAGENS DE SUCESSO DO PROJETO ******************************************* */
 const SUCESS_REQUEST = { status: true, status_code: 200, message: 'Requisição bem sucedida' }
 const SUCESS_CREATED_ITEM = { status:true, status_code:201, message: 'Requisição bem sucedida, obejeto criado com sucesso'}
+const SUCESS_UPDATED_ITEM = { status:true, status_code:200, message: 'Requisição bem sucedida, objeto atualizado com sucesso'}
 
 module.exports = {
     HEADER,
     SUCESS_REQUEST,
     SUCESS_CREATED_ITEM,
+    SUCESS_UPDATED_ITEM,
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_INTERNAL_SERVER_CONTROLLER,
