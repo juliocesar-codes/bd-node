@@ -92,11 +92,23 @@ const inserirFilme = async function (filme, contentType) {
             if (!validarDados) {
                 let result = await filmeDAO.setInsertFilms(filme)
                 if (result) {
-                    MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code
-                    MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message
 
-                    return MESSAGE.HEADER //201
+                    // Chama a função para receber o id gerado no banco de dados 
+                    let lastIdFilme = await filmeDAO.getSelectLastIdFilm()
+
+                    if (lastIdFilme) {
+                        // Adiciona no JSON de filme o ID que foi gerado pelo banco de dados
+                        filme.id = lastIdFilme
+
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message
+                        MESSAGE.HEADER.response = filme
+
+                        return MESSAGE.HEADER //201
+                    } else {
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+                    }
                 } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
@@ -176,21 +188,21 @@ const excluirFilme = async function (id) {
     try {
         let validarID = await buscarFilmeId(id)
 
-        if(validarID.status_code == 200){
+        if (validarID.status_code == 200) {
             let result = await filmeDAO.setDeleteFilms(id)
 
-            if(result){
+            if (result) {
                 MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.film = result
 
                 return MESSAGE.HEADER
-            }else{
+            } else {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
             }
-        }else{
+        } else {
             return validarID
-        } 
+        }
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
