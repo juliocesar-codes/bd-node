@@ -94,7 +94,7 @@ const setInsertGenrs = async function (genero) {
 
 const setUpdateGenrs = async function (genero) {
     try {
-        let sql = `UPDATE tbl_genero SET nome = '${genero.nome}'`
+        let sql = `UPDATE tbl_genero SET nome = '${genero.nome}' WHERE id = ${genero.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -108,10 +108,26 @@ const setUpdateGenrs = async function (genero) {
     }
 }
 
+const setDeleteGenrs = async function (id) {
+    try {
+        let sql = `DELETE FROM tbl_genero WHERE id = ${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        }else 
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports={
     getSelectAllGenrs,
     getSelectByIdGenrs,
     getSelectLastIdFilm,
     setInsertGenrs,
-    setUpdateGenrs
+    setUpdateGenrs,
+    setDeleteGenrs
 }

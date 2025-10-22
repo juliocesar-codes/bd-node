@@ -36,11 +36,12 @@ app.use((request, response, next) =>{
 // Import das controllers da API
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_generos.js')
+const controllerPersonagem = require('./controller/personagem/controller_personagem.js')
 
 // Request -> Recebe os Dados da Requisição
 // Response -> Envia os Dados na API
 
-// EndPoints para CRUD de Filmes
+// --------------------- EndPoints para CRUD de Filmes ----------------------- 
 
 // Retorna a lista de Filmes
 app.get('/v1/locadora/filme', cors(), async function(request,response){
@@ -107,6 +108,8 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) 
 
 })
 
+// --------------------- EndPoints para CRUD de Generos ----------------------- 
+
 // End Point que retorna todos os generos
 app.get('/v1/locadora/genero', cors(), async function (request, response) {
     // Chama a função da controller para retornar todos os filmes
@@ -143,6 +146,79 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, 
     response.json(genero)
 })
 
+app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe os dados do body
+    let dadosBody = request.body
+
+    // Recebe o id do filme encaminhado pelo URL
+    let idGenero = request.params.id
+
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+
+})
+
+app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+    let idGenero = request.params.id
+
+    let genero = await controllerGenero.deletarGenero(idGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+// --------------------- EndPoints para CRUD de Personagens ----------------------- 
+
+app.get('/v1/locadora/personagem', cors(), async function (request, response) {
+    let personagem = await controllerPersonagem.listarPersonagens()
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+    let idPersonagem = request.params.id
+
+    let personagem = await controllerPersonagem.listarPersonagensById(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let personagem = await controllerPersonagem.inserirPersonagem(dadosBody, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe os dados do body
+    let dadosBody = request.body
+
+    // Recebe o id do filme encaminhado pelo URL
+    let idPersonagem= request.params.id
+
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    let personagem = await controllerPersonagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+
+
+})
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições...')

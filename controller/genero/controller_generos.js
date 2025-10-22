@@ -123,6 +123,74 @@ const inserirGenero = async function (genero, contentType) {
     }
 }
 
+const atualizarGenero = async function (genero, id, contentType) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+    try {
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+             let validarDados = await validarDadosGenero(genero)
+
+             if (!validarDados) {
+                let validarId = await buscarGeneroId(id)
+
+                if (validarId.status_code == 200) {
+                    genero.id = parseInt(id)
+
+                    let result = await generoDAO.setUpdateGenrs(genero)
+
+                    if (result) {
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_UPDATED_ITEM.message
+                        MESSAGE.HEADER.response = genero
+
+                        return MESSAGE.HEADER
+                    }else{
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+                    }
+                }else{
+                    return validarId
+                }
+             } else{
+                return validarDados
+             }
+        }else{
+            console.log(contentType)
+            return MESSAGE.ERROR_CONTENT_TYPE
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
+const deletarGenero = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    // console.log(isNaN(id))
+    try {
+        let validarID = await buscarGeneroId(id)
+        
+                if (validarID.status_code == 200) {
+                    let result = await generoDAO.setDeleteGenrs(id)
+
+            if (result) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
+                    MESSAGE.HEADER.response.gener = result
+
+                    return MESSAGE.HEADER //200
+
+                } else {
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //404
+                }
+
+            } else {
+                return validarID //500
+            }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500    
+    }
+}
+
 const validarDadosGenero = async function (genero) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
@@ -135,5 +203,7 @@ const validarDadosGenero = async function (genero) {
 module.exports = {
     listarGeneros,
     buscarGeneroId,
-    inserirGenero
+    inserirGenero,
+    atualizarGenero,
+    deletarGenero
 }
