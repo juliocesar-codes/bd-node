@@ -207,7 +207,7 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (r
     let dadosBody = request.body
 
     // Recebe o id do filme encaminhado pelo URL
-    let idPersonagem= request.params.id
+    let idPersonagem = request.params.id
 
     // Recebe o content-type da requisição
     let contentType = request.headers['content-type']
