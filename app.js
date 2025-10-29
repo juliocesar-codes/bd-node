@@ -37,6 +37,7 @@ app.use((request, response, next) =>{
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_generos.js')
 const controllerPersonagem = require('./controller/personagem/controller_personagem.js')
+const controllerProdutora = require('./controller/produtora/controller_produtora.js')
 
 // Request -> Recebe os Dados da Requisição
 // Response -> Envia os Dados na API
@@ -216,9 +217,62 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (r
 
     response.status(personagem.status_code)
     response.json(personagem)
-
-
 })
+
+app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+    let idPersonagem = request.params.id
+
+    let personagem = await controllerPersonagem.deletarPersonagem(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+// --------------------- EndPoints para CRUD de Produtoras ----------------------- 
+
+app.get('/v1/locadora/produtora', cors(), async function (request, response) {
+    let produtora = await controllerProdutora.listarProdutoras()
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+})
+
+app.get('/v1/locadora/produtora/:id', cors(), async function (request, response) {
+    let idProdutora = request.params.id
+
+    let produtora = await controllerProdutora.buscarProdutoraId(idProdutora)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+})
+
+app.post('/v1/locadora/produtora', cors(), bodyParserJSON, async function (request, response) {
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let produtora = await controllerProdutora.inserirProdutora(dadosBody, contentType)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+})
+
+app.put('/v1/locadora/produtora/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe os dados do body
+    let dadosBody = request.body
+
+    // Recebe o id do filme encaminhado pelo URL
+    let idProdutora = request.params.id
+
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    let produtora = await controllerProdutora.atualizarProdutora(dadosBody, idProdutora, contentType)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+})
+
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições...')

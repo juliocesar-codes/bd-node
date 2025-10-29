@@ -105,10 +105,25 @@ const setUpdatePersona = async function (personagem) {
     }
 }
 
+const setDeletePersona = async function (id) {
+    try {
+        let sql = `DELETE FROM tbl_personagem WHERE id = ${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result) {
+            return true
+        }else 
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     getSelectAllPersona,
     getSelectAllPersonaById,
     getSelectLastIdFilm,
     setInsertPersona,
-    setUpdatePersona
+    setUpdatePersona,
+    setDeletePersona
 }
