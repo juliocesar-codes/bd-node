@@ -161,6 +161,31 @@ const atualizarProdutora = async function (produtora, id, contentType) {
     }
 }
 
+const excluirProdutora = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+    try {
+        let validarID = await buscarProdutoraId(id)
+
+        if (validarID.status_code == 200) {
+            let result = await produtoraDAO.setDeleteProducer(id)
+
+            if (result) {
+                MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
+                MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
+                MESSAGE.HEADER.response.film = result
+
+                return MESSAGE.HEADER
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+            }
+        } else {
+            return validarID
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 const validarDadosProdutora = async function (produtora) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
@@ -185,5 +210,6 @@ module.exports = {
     listarProdutoras,
     buscarProdutoraId,
     inserirProdutora,
-    atualizarProdutora
+    atualizarProdutora,
+    excluirProdutora
 }

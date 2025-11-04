@@ -98,10 +98,25 @@ const setUpdateProducer = async function (produtora) {
     }
 }
 
+const setDeleteProducer = async function (id) {
+    try {
+        let sql = `DELETE FROM tbl_produtora WHERE id = ${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result) {
+            return true
+        }else 
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     getSelectAllProducer,
     getSelectByIdProducer,
     getSelectLastIdProducer,
     setInsertProducer,
-    setUpdateProducer
+    setUpdateProducer,
+    setDeleteProducer
 }
