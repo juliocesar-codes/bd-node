@@ -35,111 +35,7 @@ app.use((request, response, next) =>{
 
 // // --------------------- EndPoints para CRUD de Personagens ----------------------- 
 
-// app.get('/v1/locadora/personagem', cors(), async function (request, response) {
-//     let personagem = await controllerPersonagem.listarPersonagens()
 
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
-
-// app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
-//     let idPersonagem = request.params.id
-
-//     let personagem = await controllerPersonagem.listarPersonagensById(idPersonagem)
-
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
-
-// app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
-//     let dadosBody = request.body
-
-//     let contentType = request.headers['content-type']
-
-//     let personagem = await controllerPersonagem.inserirPersonagem(dadosBody, contentType)
-
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
-
-// app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
-//     // Recebe os dados do body
-//     let dadosBody = request.body
-
-//     // Recebe o id do filme encaminhado pelo URL
-//     let idPersonagem = request.params.id
-
-//     // Recebe o content-type da requisição
-//     let contentType = request.headers['content-type']
-
-//     let personagem = await controllerPersonagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
-
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
-
-// app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
-//     let idPersonagem = request.params.id
-
-//     let personagem = await controllerPersonagem.deletarPersonagem(idPersonagem)
-
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
-
-// // --------------------- EndPoints para CRUD de Produtoras ----------------------- 
-
-// app.get('/v1/locadora/produtora', cors(), async function (request, response) {
-//     let produtora = await controllerProdutora.listarProdutoras()
-
-//     response.status(produtora.status_code)
-//     response.json(produtora)
-// })
-
-// app.get('/v1/locadora/produtora/:id', cors(), async function (request, response) {
-//     let idProdutora = request.params.id
-
-//     let produtora = await controllerProdutora.buscarProdutoraId(idProdutora)
-
-//     response.status(produtora.status_code)
-//     response.json(produtora)
-// })
-
-// app.post('/v1/locadora/produtora', cors(), bodyParserJSON, async function (request, response) {
-//     let dadosBody = request.body
-
-//     let contentType = request.headers['content-type']
-
-//     let produtora = await controllerProdutora.inserirProdutora(dadosBody, contentType)
-
-//     response.status(produtora.status_code)
-//     response.json(produtora)
-// })
-
-// app.put('/v1/locadora/produtora/:id', cors(), bodyParserJSON, async function (request, response) {
-//     // Recebe os dados do body
-//     let dadosBody = request.body
-
-//     // Recebe o id do filme encaminhado pelo URL
-//     let idProdutora = request.params.id
-
-//     // Recebe o content-type da requisição
-//     let contentType = request.headers['content-type']
-
-//     let produtora = await controllerProdutora.atualizarProdutora(dadosBody, idProdutora, contentType)
-
-//     response.status(produtora.status_code)
-//     response.json(produtora)
-// })
-
-// app.delete('/v1/locadora/produtora/:id', cors(), async function (request, response) {
-//     let idProdutora = request.params.id
-
-//     let personagem = await controllerProdutora.excluirProdutora(idProdutora)
-
-//     response.status(personagem.status_code)
-//     response.json(personagem)
-// })
 
 const routesAtor = require('./routes/route.ator.js')
 app.use('/v1/locadora/ator',   cors(),    routesAtor)
@@ -150,6 +46,11 @@ app.use('/v1/locadora/filme',   cors(),    routesFilme)
 const routesGenero = require('./routes/route.genero.js')
 app.use('/v1/locadora/genero', cors(), routesGenero)
 
+const routesProdutora = require('./routes/route.produtora.js')
+app.use('/v1/locadora/produtora', cors(), routesProdutora)
+
+const routesPersonagem = require('./routes/route.personagem.js')
+app.use('/v1/locadora/personagem', cors(), routesPersonagem)
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições...')
