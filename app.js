@@ -37,19 +37,19 @@ app.use((request, response, next) =>{
 
 
 
-const routesAtor = require('./routes/route.ator.js')
+const routesAtor = require('./routes/route_ator.js')
 app.use('/v1/locadora/ator',   cors(),    routesAtor)
 
-const routesFilme = require('./routes/route.filme.js')
+const routesFilme = require('./routes/route_filme.js')
 app.use('/v1/locadora/filme',   cors(),    routesFilme)
 
-const routesGenero = require('./routes/route.genero.js')
+const routesGenero = require('./routes/route_genero.js')
 app.use('/v1/locadora/genero', cors(), routesGenero)
 
-const routesProdutora = require('./routes/route.produtora.js')
+const routesProdutora = require('./routes/route_produtora.js')
 app.use('/v1/locadora/produtora', cors(), routesProdutora)
 
-const routesPersonagem = require('./routes/route.personagem.js')
+const routesPersonagem = require('./routes/route_personagem.js')
 app.use('/v1/locadora/personagem', cors(), routesPersonagem)
 
 app.listen(PORT, function(){
