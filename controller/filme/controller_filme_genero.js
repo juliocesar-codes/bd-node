@@ -35,7 +35,6 @@ const listarFilmesGeneros = async function () {
                 return MESSAGE.ERROR_NOT_FOUND  //404
             }
         } else {
-            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     } catch (error) {
@@ -107,6 +106,7 @@ const listarGenerosIdFilme = async function (idFilme) {
 
             } else {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                
             }
 
         } else {
@@ -170,7 +170,6 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
 
                     // Chama a função para receber o id gerado no banco de dados 
                     let lastIdFilmeGenero = await filmeGeneroDAO.getSelectLastId()
-
                     if (lastIdFilmeGenero) {
                         filmeGenero.id = lastIdFilmeGenero
 
@@ -181,11 +180,9 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
 
                         return MESSAGE.HEADER
                     }else{    
-                        console.log(lastIdGenero)    
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                     }
                 } else{
-                    console.log(result)
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                 }
             }else {
@@ -195,7 +192,6 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -231,7 +227,6 @@ const atualizarFilmeGenero = async function (filmeGenero, id, contentType) {
                 return validarDados
              }
         }else{
-            console.log(contentType)
             return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
