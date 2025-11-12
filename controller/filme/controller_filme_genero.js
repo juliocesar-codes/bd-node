@@ -106,7 +106,7 @@ const listarGenerosIdFilme = async function (idFilme) {
 
             } else {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-                
+
             }
 
         } else {
@@ -179,19 +179,20 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
                         MESSAGE.HEADER.response = filmeGenero
 
                         return MESSAGE.HEADER
-                    }else{    
+                    } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                     }
-                } else{
+                } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                 }
-            }else {
+            } else {
                 return validarDados
             }
-        } else{
+        } else {
             return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -200,9 +201,9 @@ const atualizarFilmeGenero = async function (filmeGenero, id, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-             let validarDados = await validarDadosfilmeGenero(filmeGenero)
+            let validarDados = await validarDadosfilmeGenero(filmeGenero)
 
-             if (!validarDados) {
+            if (!validarDados) {
                 let validarId = await buscarFilmeGeneroId(id)
 
                 if (validarId.status_code == 200) {
@@ -217,16 +218,16 @@ const atualizarFilmeGenero = async function (filmeGenero, id, contentType) {
                         MESSAGE.HEADER.response = filmeGenero
 
                         return MESSAGE.HEADER
-                    }else{
+                    } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                     }
-                }else{
+                } else {
                     return validarId
                 }
-             } else{
+            } else {
                 return validarDados
-             }
-        }else{
+            }
+        } else {
             return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
@@ -240,28 +241,60 @@ const deletarFilmeGenero = async function (id) {
     // console.log(isNaN(id))
     try {
         let validarID = await buscarFilmeGeneroId(id)
-        
-                if (validarID.status_code == 200) {
-                    let result = await filmeGeneroDAO.setDeleteFilmsGenres(id)
+
+        if (validarID.status_code == 200) {
+            let result = await filmeGeneroDAO.setDeleteFilmsGenres(id)
 
             if (result) {
-                    MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
-                    MESSAGE.HEADER.response.filme_genero = result
+                MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
+                MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
+                MESSAGE.HEADER.response.filme_genero = result
 
-                    return MESSAGE.HEADER //200
-
-                } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //404
-                }
+                return MESSAGE.HEADER //200
 
             } else {
-                return validarID //500
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //404
             }
+
+        } else {
+            return validarID //500
+        }
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500    
     }
 }
+
+const deletarFilmeGeneroByIdFilme = async function (idFilme) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        let validarID = await buscarFilmeGeneroId(idFilme)
+
+        if (validarID.status_code == 200) {
+            let result = await filmeGeneroDAO.setDeleteFilmsGenresByidFilm(idFilme)
+
+            if (result) {
+                MESSAGE.HEADER.status = MESSAGE.SUCESS_REQUEST.status
+                MESSAGE.HEADER.status_code = MESSAGE.SUCESS_REQUEST.status_code
+                MESSAGE.HEADER.response.filme_genero = result
+
+                return MESSAGE.HEADER //200
+
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //404
+
+            }
+
+        } else {
+
+            return validarID //500
+        }
+    } catch (error) {
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500    
+    }
+}
+
 
 const validarDadosFilmeGenero = async function (filmeGenero) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -269,10 +302,10 @@ const validarDadosFilmeGenero = async function (filmeGenero) {
     if (filmeGenero.id_filme == '' || filmeGenero.id_filme == null || filmeGenero.id_filme == undefined || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme <= 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_FILME] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS
-    }else if (filmeGenero.id_genero == '' || filmeGenero.id_genero == null || filmeGenero.id_genero == undefined || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero <= 0) {
+    } else if (filmeGenero.id_genero == '' || filmeGenero.id_genero == null || filmeGenero.id_genero == undefined || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero <= 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_GENERO] Inválido'
-        return MESSAGE.ERROR_REQUIRED_FIELDS 
-        
+        return MESSAGE.ERROR_REQUIRED_FIELDS
+
     }
 }
 
@@ -283,5 +316,6 @@ module.exports = {
     listarFilmesIdGenero,
     inserirFilmeGenero,
     atualizarFilmeGenero,
-    deletarFilmeGenero
+    deletarFilmeGenero,
+    deletarFilmeGeneroByIdFilme
 }

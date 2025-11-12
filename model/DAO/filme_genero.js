@@ -75,7 +75,6 @@ const getSelectGenresByIdFilms = async function (idFilme) {
             return false
 
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -119,7 +118,6 @@ const getSelectLastId = async function () {
             return false
 
     } catch (error) {
-        // console.log(error)
         return false
     }
 }
@@ -128,7 +126,6 @@ const setInsertFilmsGenres = async function (filmeGenero) {
     try {
         // Script SQL
         let sql = `INSERT INTO tbl_filme_genero (id_filme, id_genero) VALUES (${filmeGenero.id_filme}, ${filmeGenero.id_genero});`
-
         let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
@@ -150,8 +147,8 @@ const setUpdateFilmsGenres = async function (filmeGenero) {
         if (result) {
             return true
         }
-        else 
-        return false
+        else
+            return false
     } catch (error) {
         return false
     }
@@ -165,14 +162,27 @@ const setDeleteFilmsGenres = async function (id) {
 
         if (result) {
             return true
-        }else 
+        } else
             return false
     } catch (error) {
         return false
     }
 }
 
-module.exports={
+const setDeleteFilmsGenresByidFilm = async function (idFilme) {
+    try {
+        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${idFilme}`
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result >= 0) {
+            return true
+        } else
+            return false
+    } catch (error) {
+        return false
+    }
+}
+
+module.exports = {
     getSelectAllFilmsGenres,
     getSelectByIdFilmGenrs,
     getSelectGenresByIdFilms,
@@ -180,5 +190,6 @@ module.exports={
     getSelectLastId,
     setInsertFilmsGenres,
     setUpdateFilmsGenres,
-    setDeleteFilmsGenres
+    setDeleteFilmsGenres,
+    setDeleteFilmsGenresByidFilm
 }
